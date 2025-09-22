@@ -1,0 +1,45 @@
+#workspace {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: #e9ecef;
+    display: flex;
+    flex-direction: column;
+}
+
+#simulation-area {
+    flex-grow: 1;
+    border: 2px dashed #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: #fff;
+}
+
+#simulation-area.drag-over {
+    border-color: #007bff;
+    background-color: #e7f3ff;
+}
+
+.workspace-item {
+    background-color: #ffffff;
+    border: 1px solid #007bff;
+    border-radius: 5px;
+    padding: 0;
+    margin-bottom: 10px;
+    cursor: pointer;
+    position: relative;
+    width: 64px;
+    height: 64px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.workspace-item img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.workspace-item.selected {
+    border-color: #ff0000;
+    border-width: 2px;
+}

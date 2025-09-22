@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Food Lab Simulation</title>
+    <link rel="stylesheet" href="assets/css/base.css">
+    <link rel="stylesheet" href="assets/css/toolbox.css">
+    <link rel="stylesheet" href="assets/css/workspace.css">
+    <link rel="stylesheet" href="assets/css/panels.css">
+    <link rel="stylesheet" href="assets/css/modals.css">
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
@@ -18,7 +23,7 @@
     </div>
     <div id="app-container">
         <header>
-            <h1>Food Lab Simulation</h1>
+            <h1>fffff ffff fffff</h1>
             <nav>
                 <button id="file-btn">File</button>
                 <button id="edit-btn">Edit</button>
@@ -40,7 +45,7 @@
                 </div>
             </aside>
             <section id="workspace">
-                <h2>Simulation Workspace</h2>
+                <h2>Workspace</h2>
                 <div id="simulation-area">
                     <!-- Drag and drop items here -->
                 </div>
@@ -81,8 +86,44 @@
         <div class="modal-content">
             <span class="close-btn">&times;</span>
             <h2 id="item-properties-title">Item Properties</h2>
-            <div id="item-properties-content"></div>
+            <div class="modal-tabs">
+                <button class="tab-link active" onclick="openTab(event, 'physical')">Physical</button>
+                <button class="tab-link" onclick="openTab(event, 'config')">Config</button>
+                <button class="tab-link" onclick="openTab(event, 'cli')">CLI</button>
+                <button class="tab-link" onclick="openTab(event, 'attributes')">Attributes</button>
+            </div>
+            <div id="physical" class="tab-content" style="display: block;">
+                <h3>Physical Properties</h3>
+                <div id="physical-properties-content"></div>
+            </div>
+            <div id="config" class="tab-content">
+                <h3>Configuration</h3>
+                <div id="config-properties-content"></div>
+            </div>
+            <div id="cli" class="tab-content">
+                <h3>Command Line Interface</h3>
+                <textarea id="cli-content" rows="10" style="width: 100%;"></textarea>
+            </div>
+            <div id="attributes" class="tab-content">
+                <h3>Attributes</h3>
+                <div id="attributes-properties-content"></div>
+            </div>
         </div>
     </div>
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tab-link");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+    </script>
 </body>
 </html>

@@ -206,25 +206,83 @@ document.addEventListener('DOMContentLoaded', () => {
         return null;
     }
 
-    const propertiesPanel = document.getElementById('properties-panel');
-    const propertiesContent = document.getElementById('properties-content');
 
-    simulationArea.addEventListener('click', (e) => {
+    // --- Item Properties Modal Logic ---
+    const itemPropertiesModal = document.getElementById('item-properties-modal');
+    const itemPropertiesTitle = document.getElementById('item-properties-title');
+    const physicalPropertiesContent = document.getElementById('physical-properties-content');
+    const configPropertiesContent = document.getElementById('config-properties-content');
+    const cliContent = document.getElementById('cli-content');
+    const attributesPropertiesContent = document.getElementById('attributes-properties-content');
+    const propertiesCloseBtn = itemPropertiesModal.querySelector('.close-btn');
+
+    function showItemPropertiesModal(itemId) {
+        const itemState = workspaceItemsState[itemId];
+        if (!itemState) return;
+
+        const itemData = findToolboxItemData(itemState.name);
+        if (!itemData) return;
+
+        itemPropertiesTitle.textContent = `${itemData.name} Properties`;
+
+        // Populate Physical Tab
+        let physicalHTML = '<ul>';
+        if (itemData.physical) {
+            for (const key in itemData.physical) {
+                physicalHTML += `<li><strong>${key.charAt(0).toUpperCase() + key.slice(1)}:</strong> ${itemData.physical[key]}</li>`;
+            }
+        }
+        physicalHTML += '</ul>';
+        physicalPropertiesContent.innerHTML = physicalHTML;
+
+        // Populate Config Tab
+        let configHTML = '<ul>';
+        if (itemData.config) {
+            for (const key in itemData.config) {
+                configHTML += `<li><strong>${key.charAt(0).toUpperCase() + key.slice(1)}:</strong> ${itemData.config[key]}</li>`;
+            }
+        }
+        configHTML += '</ul>';
+        configPropertiesContent.innerHTML = configHTML;
+
+        // Populate Attributes Tab
+        let attributesHTML = '<ul>';
+        if (itemData.attributes) {
+            for (const key in itemData.attributes) {
+                attributesHTML += `<li><strong>${key.charAt(0).toUpperCase() + key.slice(1)}:</strong> ${itemData.attributes[key]}</li>`;
+            }
+        }
+        attributesHTML += '</ul>';
+        attributesPropertiesContent.innerHTML = attributesHTML;
+
+        itemPropertiesModal.style.display = 'block';
+    }
+
+    function formatProperties(data) {
+        if (typeof data === 'object' && data !== null) {
+            let html = '<ul>';
+            for (const key in data) {
+                html += `<li><strong>${key.charAt(0).toUpperCase() + key.slice(1)}:</strong> ${formatProperties(data[key])}</li>`;
+            }
+            html += '</ul>';
+            return html;
+        } else {
+            return data;
+        }
+    }
+
+    function closePropertiesModal() {
+        itemPropertiesModal.style.display = 'none';
+    }
+
+    propertiesCloseBtn.addEventListener('click', closePropertiesModal);
+
+    // Add double-click event listener to workspace items
+    simulationArea.addEventListener('dblclick', (e) => {
         const workspaceItem = e.target.closest('.workspace-item');
         if (workspaceItem) {
-            const selectedItem = document.querySelector('.workspace-item.selected');
-            if (selectedItem) {
-                selectedItem.classList.remove('selected');
-            }
-            workspaceItem.classList.add('selected');
-            propertiesPanel.style.display = 'block'; // Show properties panel
-            updatePropertiesPanel(workspaceItem.getAttribute('data-id'));
-        } else {
-            const selectedItem = document.querySelector('.workspace-item.selected');
-            if (selectedItem) {
-                selectedItem.classList.remove('selected');
-            }
-            propertiesPanel.style.display = 'none'; // Hide properties panel
+            const itemId = workspaceItem.getAttribute('data-id');
+            showItemPropertiesModal(itemId);
         }
     });
 
@@ -233,6 +291,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!itemState) {
             propertiesContent.innerHTML = '<p>Select an item to see its properties.</p>';
             return;
+        }
+
+        let specificProperties = '';
+        if (itemState.name.toLowerCase() === 'tomato') {
+            specificProperties = '<p>Protein: 1.1g</p><p>Vitamin C: 13.7mg</p>';
         }
 
         let ingredientsHTML = '';
@@ -250,16 +313,11 @@ document.addEventListener('DOMContentLoaded', () => {
             <input type="text" id="quantity" value="${itemState.quantity}" data-id="${itemId}">
             <label for="unit">Unit:</label>
             <input type="text" id="unit" value="${itemState.unit}" data-id="${itemId}">
+            ${specificProperties}
             ${ingredientsHTML}
         `;
     }
 
-    propertiesContent.addEventListener('input', (e) => {
-        if (e.target.id === 'quantity' || e.target.id === 'unit') {
-            const itemId = e.target.getAttribute('data-id');
-            workspaceItemsState[itemId][e.target.id] = e.target.value;
-        }
-    });
 
     // --- Existing Modal Logic ---
 
@@ -279,6 +337,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target == loginModal) {
             loginModal.style.display = 'none';
         }
+        if (e.target == itemPropertiesModal) {
+            closePropertiesModal();
+        }
     });
 
     const loginForm = document.getElementById('login-form');
@@ -288,4 +349,5 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('Login form submitted');
         loginModal.style.display = 'none';
     });
+
 });

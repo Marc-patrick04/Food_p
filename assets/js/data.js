@@ -11,7 +11,36 @@ const toolboxData = {
             { name: 'Papaya', image: 'assets/images/test.jpg', protein: 0.5, carbs: 11, fat: 0.3 },
             { name: 'Avocado', image: 'assets/images/test.jpg', protein: 2, carbs: 9, fat: 15 },
             { name: 'Lemon/Lime', image: 'assets/images/test.jpg', protein: 1.1, carbs: 9, fat: 0.3 },
-            { name: 'Tomatoes', image: 'assets/images/test.jpg', protein: 0.9, carbs: 3.9, fat: 0.2 }
+            { 
+                name: 'Tomatoes', 
+                image: 'assets/images/test.jpg',
+                components: {
+                    water: '~94-95%',
+                    carbohydrates: {
+                        sugars: ['glucose', 'fructose'],
+                        fiber: ['cellulose', 'pectin']
+                    },
+                    proteins: '~1%',
+                    fats: '<0.5%',
+                    vitamins: {
+                        'Vitamin C': 'ascorbic acid',
+                        'Vitamin A': ['carotenoids', 'lycopene', 'beta-carotene'],
+                        'Vitamin K': '',
+                        'B-complex': ['B1', 'B2', 'B3', 'B5', 'B6', 'folate']
+                    },
+                    minerals: {
+                        potassium: 'K',
+                        magnesium: 'Mg',
+                        phosphorus: 'P',
+                        calcium: 'Ca',
+                        iron: 'Fe'
+                    },
+                    'organic-acids': ['citric acid', 'malic acid', 'ascorbic acid'],
+                    pigments: ['lycopene', 'beta-carotene', 'chlorophyll'],
+                    'other-bioactive-compounds': ['flavonoids', 'phenolic compounds', 'amino acids'],
+                    seeds: ['oils', 'proteins', 'sugars', 'acids']
+                }
+            }
         ],
         'Vegetables': [
             { name: 'Potatoes', image: 'assets/images/test.jpg', protein: 2, carbs: 17, fat: 0.1 },

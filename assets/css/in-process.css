@@ -1,0 +1,162 @@
+.in-process-container {
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+}
+
+.process-status {
+    background-color: white;
+    padding: 15px;
+    margin-bottom: 15px;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+}
+
+.process-status h4 {
+    margin-top: 0;
+    color: #495057;
+}
+
+.contents-section {
+    background-color: white;
+    padding: 15px;
+    margin-bottom: 15px;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+}
+
+.contents-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.contents-list li {
+    padding: 8px;
+    margin-bottom: 5px;
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 3px;
+}
+
+.add-ingredients {
+    background-color: white;
+    padding: 15px;
+    margin-bottom: 15px;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+}
+
+.add-ingredients select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+}
+
+.volume-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.volume-control input {
+    width: 100px;
+    padding: 8px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+}
+
+.volume-control span {
+    color: #6c757d;
+}
+
+.blender-controls {
+    background-color: white;
+    padding: 15px;
+    margin-bottom: 15px;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.control-button {
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+#power-toggle {
+    background-color: #dc3545;
+    color: white;
+}
+
+#power-toggle.active {
+    background-color: #28a745;
+}
+
+#start-blending {
+    background-color: #007bff;
+    color: white;
+}
+
+#start-blending:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
+.speed-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.speed-control label {
+    min-width: 60px;
+}
+
+.speed-control input[type="range"] {
+    flex: 1;
+}
+
+.speed-control span {
+    min-width: 20px;
+    text-align: center;
+}
+
+.action-button {
+    width: 100%;
+    padding: 8px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.action-button:hover {
+    background-color: #0056b3;
+}
+
+.process-result {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 15px;
+    border-radius: 4px;
+    margin-top: 15px;
+}
+
+.process-result h4 {
+    margin-top: 0;
+    color: #155724;
+}

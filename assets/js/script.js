@@ -1,5 +1,77 @@
-// Global variables and functions
-window.workspaceItemsState = {};
+// Function to show item properties modal
+window.showItemProperties = function(itemId) {
+    const itemPropertiesModal = document.getElementById('item-properties-modal');
+    const itemPropertiesTitle = document.getElementById('item-properties-title');
+    
+    const itemState = window.workspaceItemsState[itemId];
+    if (!itemState) {
+        console.error('No item state found for ID:', itemId);
+        return;
+    }
+
+    const itemData = findToolboxItemData(itemState.name);
+    if (!itemData) {
+        console.error('No item data found for name:', itemState.name);
+        return;
+    }
+
+    console.log('Showing properties for:', itemState.name);
+    
+    // Initialize in-process state if it doesn't exist
+    if (!itemState.inProcess) {
+        itemState.inProcess = {
+            status: 'idle',
+            contents: [],
+            currentOperation: null,
+            timeElapsed: 0,
+            properties: {}
+        };
+    }
+
+    // Set the title
+    itemPropertiesTitle.textContent = `${itemData.name} Properties`;
+    
+    // Store current item ID for controls
+    window.currentItemId = itemId;
+
+    // Update all tabs based on item type
+    if (itemData.properties) {
+        displayCompositionContent(itemData.properties);
+        if (typeof displayEquipmentProperties === 'function') {
+            displayEquipmentProperties(itemData.properties, itemData);
+        }
+        if (typeof displayInProcessContent === 'function') {
+            displayInProcessContent(itemState, itemData);
+        }
+    } else if (itemData.components) {
+        displayCompositionContent(itemData.components);
+        if (typeof displayFoodProperties === 'function') {
+            displayFoodProperties(itemData.components);
+        }
+    }
+
+    // Show the modal
+    itemPropertiesModal.style.display = 'block';
+
+    // Ensure the close button works
+    const closeBtn = itemPropertiesModal.querySelector('.close-btn');
+    if (closeBtn) {
+        closeBtn.onclick = function() {
+            itemPropertiesModal.style.display = 'none';
+        };
+    }
+
+    // Close when clicking outside the modal
+    window.onclick = function(event) {
+        if (event.target === itemPropertiesModal) {
+            itemPropertiesModal.style.display = 'none';
+        }
+    };
+}
+
+// Make functions globally available
+window.showItemProperties = showItemProperties;
+
 window.findToolboxItemData = function(itemName) {
     for (const category in toolboxData) {
         for (const subcategory in toolboxData[category]) {
@@ -127,124 +199,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Existing Simulation Area and Properties Panel Logic ---
 
-    const simulationArea = document.getElementById('simulation-area');
-
-    simulationArea.addEventListener('dragover', (e) => {
-        e.preventDefault();
-    });
-
-    simulationArea.addEventListener('dragenter', (e) => {
-        e.preventDefault();
-        simulationArea.classList.add('drag-over');
-    });
-
-    simulationArea.addEventListener('dragleave', () => {
-        simulationArea.classList.remove('drag-over');
-    });
-
-    window.workspaceItemsState = window.workspaceItemsState || {};
-    window.nextItemId = window.nextItemId || 0;
-
-    simulationArea.addEventListener('drop', (e) => {
-        e.preventDefault();
-        simulationArea.classList.remove('drag-over');
-        const itemId = e.dataTransfer.getData('item-id');
-        
-        if (itemId) {
-            moveWorkspaceItem(itemId, e.clientX, e.clientY);
-        } else {
-            const itemName = e.dataTransfer.getData('item-name');
-            if (itemName) {
-                createWorkspaceItem(itemName, e.clientX, e.clientY);
-            }
-        }
-    });
-
-    function createWorkspaceItem(name, x, y) {
-        console.log('Creating workspace item:', name);
-        const id = `item-${window.nextItemId++}`;
-        const state = {
-            id: id,
-            name: name,
-            quantity: 1,
-            unit: 'unit',
-            ingredients: []
-        };
-        // Store the state in the global workspaceItemsState
-        window.workspaceItemsState[id] = state;
-        console.log('Created state:', state);
-        console.log('Current workspaceItemsState:', window.workspaceItemsState);
-        
-        const newItem = document.createElement('div');
-        newItem.classList.add('workspace-item');
-        newItem.setAttribute('data-id', state.id);
-        newItem.setAttribute('draggable', true);
-
-        newItem.addEventListener('dragstart', (e) => {
-            e.dataTransfer.setData('item-id', state.id);
-        });
-
-        const itemData = findToolboxItemData(state.name);
-        if (itemData && itemData.image) {
-            const img = document.createElement('img');
-            img.src = itemData.image;
-            newItem.appendChild(img);
-        } else {
-            const img = document.createElement('img');
-            img.src = 'assets/images/test.jpg';
-            newItem.appendChild(img);
-        }
-        
-        const rect = simulationArea.getBoundingClientRect();
-        newItem.style.position = 'absolute';
-        newItem.style.left = `${x - rect.left}px`;
-        newItem.style.top = `${y - rect.top}px`;
-
-        window.workspaceItemsState[state.id] = state;
-        simulationArea.appendChild(newItem);
-        
-        // Add direct double-click handler to the new item
-        newItem.addEventListener('dblclick', (e) => {
-            console.log('Double-click on item:', state.id);
-            const itemData = findToolboxItemData(state.name);
-            console.log('Item data:', itemData);
-            if (window.showItemPropertiesModal) {
-                window.showItemPropertiesModal(state.id);
-            } else {
-                console.error('showItemPropertiesModal is not available');
-            }
-        });
-    }
-
-    function moveWorkspaceItem(id, x, y) {
-        const item = document.querySelector(`.workspace-item[data-id='${id}']`);
-        if (item) {
-            const rect = simulationArea.getBoundingClientRect();
-            item.style.left = `${x - rect.left}px`;
-            item.style.top = `${y - rect.top}px`;
-        }
-    }
-
-    function findToolboxItemData(itemName) {
-        for (const category in toolboxData) {
-            for (const subcategory in toolboxData[category]) {
-                const items = toolboxData[category][subcategory];
-                const itemData = items.find(item => item.name === itemName);
-                if (itemData) {
-                    return itemData;
-                }
-            }
-        }
-        return null;
-    }
-
 
     // --- Item Properties Modal Logic ---
     const itemPropertiesModal = document.getElementById('item-properties-modal');
     const itemPropertiesTitle = document.getElementById('item-properties-title');
     const physicalPropertiesContent = document.getElementById('physical-properties-content');
     const cliContent = document.getElementById('cli-content');
-    const attributesPropertiesContent = document.getElementById('attributes-properties-content');
     const propertiesCloseBtn = itemPropertiesModal.querySelector('.close-btn');
 
     function showItemPropertiesModal(itemId) {
@@ -346,15 +306,7 @@ document.addEventListener('DOMContentLoaded', () => {
         physicalHTML += '</ul>';
         physicalPropertiesContent.innerHTML = physicalHTML;
 
-        // Populate Attributes Tab
-        let attributesHTML = '<ul>';
-        if (itemData.attributes) {
-            for (const key in itemData.attributes) {
-                attributesHTML += `<li><strong>${key.charAt(0).toUpperCase() + key.slice(1)}:</strong> ${itemData.attributes[key]}</li>`;
-            }
-        }
-        attributesHTML += '</ul>';
-        attributesPropertiesContent.innerHTML = attributesHTML;
+
 
         itemPropertiesModal.style.display = 'block';
     }

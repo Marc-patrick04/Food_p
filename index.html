@@ -10,7 +10,9 @@
     <link rel="stylesheet" href="assets/css/panels.css">
     <link rel="stylesheet" href="assets/css/modals.css">
     <link rel="stylesheet" href="assets/css/properties.css">
+    <link rel="stylesheet" href="assets/css/toolbar.css">
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/in-process.css">
 </head>
 <body>
     <div id="top-bar">
@@ -32,6 +34,7 @@
                 <button id="file-btn-icon"><img src="assets/images/file.png" alt="File"></button>
                 <button id="settings-btn"><img src="assets/images/settings.png" alt="Settings"></button>
                 <button id="refresh-btn"><img src="assets/images/refresh.png" alt="Refresh"></button>
+                <button id="delete-btn"><img src="assets/images/delete.png" alt="delete"></button>
                 <button id="help-btn"><img src="assets/images/help.png" alt="Help"></button>
             </div>
             <nav>
@@ -88,26 +91,29 @@
         </div>
     </div>
 
-    <script src="assets/js/data.js"></script>
-    <script src="assets/js/script.js"></script>
-    <script src="assets/js/properties.js"></script>
-
     <div id="item-properties-modal" class="modal" style="display: none;">
         <div class="modal-content">
             <span class="close-btn">&times;</span>
             <h2 id="item-properties-title">Item Properties</h2>
             <div class="modal-tabs">
                 <button class="tab-link active" onclick="openTab(event, 'composition')">Composition</button>
+                <button class="tab-link" onclick="openTab(event, 'in-process')">In-Process</button>
                 <button class="tab-link" onclick="openTab(event, 'processing')">Processing</button>
                 <button class="tab-link" onclick="openTab(event, 'storage')">Storage</button>
                 <button class="tab-link" onclick="openTab(event, 'equipment')">Equipment</button>
-                <button class="tab-link" onclick="openTab(event, 'attributes')">Attributes</button>
             </div>
             <div id="composition" class="tab-content" style="display: block;">
                 <h3>Composition & Properties</h3>
                 <div id="composition-content">
                     <!-- For food items: nutritional info, chemical composition -->
                     <!-- For equipment: technical specifications -->
+                </div>
+            </div>
+            <div id="in-process" class="tab-content">
+                <h3>In-Process Status</h3>
+                <div id="in-process-content">
+                    <!-- For processing equipment: mixing, blending, heating status -->
+                    <!-- For ingredients: current state in processing -->
                 </div>
             </div>
             <div id="processing" class="tab-content">
@@ -133,20 +139,18 @@
             </div>
         </div>
     </div>
-    <script>
-        function openTab(evt, tabName) {
-            var i, tabcontent, tablinks;
-            tabcontent = document.getElementsByClassName("tab-content");
-            for (i = 0; i < tabcontent.length; i++) {
-                tabcontent[i].style.display = "none";
-            }
-            tablinks = document.getElementsByClassName("tab-link");
-            for (i = 0; i < tablinks.length; i++) {
-                tablinks[i].className = tablinks[i].className.replace(" active", "");
-            }
-            document.getElementById(tabName).style.display = "block";
-            evt.currentTarget.className += " active";
-        }
-    </script>
+    <!-- First load data and utilities -->
+    <script src="assets/js/data.js"></script>
+    <!-- Then load feature-specific modules -->
+    <script src="assets/js/modal.js"></script>
+    <script src="assets/js/process.js"></script>
+    <script src="assets/js/propertyFormatter.js"></script>
+    <script src="assets/js/equipmentProperties.js"></script>
+    <script src="assets/js/foodProperties.js"></script>
+    <script src="assets/js/properties.js"></script>
+    <script src="assets/js/workspace.js"></script>
+    <script src="assets/js/toolbar.js"></script>
+    <!-- Finally load the main script that ties everything together -->
+    <script src="assets/js/script.js"></script>
 </body>
 </html>

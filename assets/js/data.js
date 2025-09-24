@@ -1,4 +1,30 @@
 const toolboxData = {
+    'In-Process Materials': {
+        'Mixtures & Solutions': [
+            {
+                name: 'Mixing Container',
+                image: 'assets/images/test.jpg',
+                components: {
+                    type: 'container',
+                    contents: [],
+                    max_capacity: 1000,
+                    current_volume: 0,
+                    unit: 'ml',
+                    in_process: {
+                        state: 'empty',
+                        contents: [],
+                        mixture_name: '',
+                        properties: {
+                            'viscosity': 'none',
+                            'temperature': 'room temperature',
+                            'color': 'none',
+                            'total_volume': '0 ml'
+                        }
+                    }
+                }
+            }
+        ]
+    },
     'Processing Equipment': {
         'Storage Equipment': [
             {
@@ -676,7 +702,39 @@ const toolboxData = {
     'Mixing & Processing Equipment': {
         'Mixing': [
             { name: 'Mixers', image: 'assets/images/test.jpg' },
-            { name: 'Blenders', image: 'assets/images/test.jpg' },
+            {
+                name: 'Blender',
+                image: 'assets/images/test.jpg',
+                properties: {
+                    technical_specs: {
+                        'power': '1000W',
+                        'capacity': '2L',
+                        'voltage': '220V',
+                        'speeds': '5'
+                    },
+                    operational_parameters: {
+                        'min_speed': '8000 RPM',
+                        'max_speed': '24000 RPM',
+                        'current_speed': '0',
+                        'power_status': 'off',
+                        'contents': []
+                    },
+                    maintenance_info: {
+                        'cleaning': 'After each use',
+                        'blade_check': 'Monthly'
+                    },
+                    safety_features: {
+                        'safety_lock': 'Lid must be properly locked',
+                        'overload_protection': 'Automatic shutoff'
+                    }
+                },
+                actions: {
+                    can_add_ingredients: true,
+                    can_blend: true,
+                    can_power: true,
+                    can_adjust_speed: true
+                }
+            },
             { name: 'Food processors', image: 'assets/images/test.jpg' },
             { name: 'Dough kneaders', image: 'assets/images/test.jpg' }
         ],

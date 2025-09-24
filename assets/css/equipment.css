@@ -1,0 +1,138 @@
+.blender-controls {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.blender-controls h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.ingredients-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 15px 0;
+}
+
+.ingredients-list li {
+    padding: 5px 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    margin-bottom: 5px;
+    border-radius: 3px;
+}
+
+.add-ingredient-control {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.add-ingredient-control select {
+    flex: 1;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
+
+.control-group {
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #eee;
+    border-radius: 3px;
+}
+
+#power-btn {
+    width: 100%;
+    padding: 8px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+#power-btn.active {
+    background-color: #28a745;
+}
+
+#power-btn:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
+.control-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #495057;
+}
+
+#speed-control {
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+#speed-display {
+    display: inline-block;
+    padding: 2px 8px;
+    background-color: #e9ecef;
+    border-radius: 3px;
+}
+
+#blend-btn {
+    width: 100%;
+    padding: 8px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+#blend-btn:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
+#blend-progress {
+    margin-top: 10px;
+    height: 5px;
+    background-color: #e9ecef;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background-color: #007bff;
+    animation: progress 3s linear infinite;
+    width: 30%;
+}
+
+@keyframes progress {
+    0% { margin-left: -30%; }
+    100% { margin-left: 100%; }
+}
+
+.blend-result {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #e9ecef;
+    border-radius: 3px;
+}
+
+.blend-result h4 {
+    margin: 0 0 5px 0;
+    color: #495057;
+}
+
+#result-text {
+    margin: 0;
+    color: #28a745;
+    font-weight: bold;
+}

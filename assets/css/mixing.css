@@ -1,0 +1,98 @@
+.mixing-container {
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+}
+
+.mixing-container h3 {
+    color: #495057;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.container-status,
+.current-contents,
+.add-ingredient-section,
+.mixture-properties {
+    background-color: white;
+    padding: 15px;
+    margin-bottom: 15px;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+}
+
+.ingredient-controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 10px;
+}
+
+#liquid-select {
+    flex: 2;
+    padding: 8px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+}
+
+#volume-input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    width: 100px;
+}
+
+.unit {
+    color: #6c757d;
+}
+
+.action-btn {
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.action-btn:hover {
+    background-color: #0056b3;
+}
+
+.action-btn:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
+#mix-contents-btn {
+    width: 100%;
+    margin-top: 10px;
+    background-color: #28a745;
+}
+
+#mix-contents-btn:hover {
+    background-color: #218838;
+}
+
+.properties-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.properties-list li {
+    padding: 5px 0;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.properties-list li:last-child {
+    border-bottom: none;
+}
+
+.properties-list strong {
+    color: #495057;
+    margin-right: 8px;
+}

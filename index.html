@@ -9,27 +9,36 @@
     <link rel="stylesheet" href="assets/css/workspace.css">
     <link rel="stylesheet" href="assets/css/panels.css">
     <link rel="stylesheet" href="assets/css/modals.css">
+    <link rel="stylesheet" href="assets/css/properties.css">
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
     <div id="top-bar">
+        
         <div id="timer-controls">
             <span>Time: </span><span id="timer">00:00:00</span>
         </div>
         <div id="mode-toggle">
             <button id="realtime-btn" class="active">Realtime</button>
             <button id="simulation-btn">Simulation</button>
+            <button id="login-btn">Login</button>
         </div>
     </div>
     <div id="app-container">
         <header>
             <h1>fffff ffff fffff</h1>
+            <div id="toolbar-icons">
+                <button id="home-btn"><img src="assets/images/home.png" alt="Home"></button>
+                <button id="file-btn-icon"><img src="assets/images/file.png" alt="File"></button>
+                <button id="settings-btn"><img src="assets/images/settings.png" alt="Settings"></button>
+                <button id="refresh-btn"><img src="assets/images/refresh.png" alt="Refresh"></button>
+                <button id="help-btn"><img src="assets/images/help.png" alt="Help"></button>
+            </div>
             <nav>
                 <button id="file-btn">File</button>
                 <button id="edit-btn">Edit</button>
                 <button id="profile-btn">Profile</button>
                 <button id="assessment-btn">Assessment</button>
-                <button id="login-btn">Login</button>
             </nav>
         </header>
         <main>
@@ -81,32 +90,46 @@
 
     <script src="assets/js/data.js"></script>
     <script src="assets/js/script.js"></script>
+    <script src="assets/js/properties.js"></script>
 
     <div id="item-properties-modal" class="modal" style="display: none;">
         <div class="modal-content">
             <span class="close-btn">&times;</span>
             <h2 id="item-properties-title">Item Properties</h2>
             <div class="modal-tabs">
-                <button class="tab-link active" onclick="openTab(event, 'physical')">Physical</button>
-                <button class="tab-link" onclick="openTab(event, 'config')">Config</button>
-                <button class="tab-link" onclick="openTab(event, 'cli')">CLI</button>
+                <button class="tab-link active" onclick="openTab(event, 'composition')">Composition</button>
+                <button class="tab-link" onclick="openTab(event, 'processing')">Processing</button>
+                <button class="tab-link" onclick="openTab(event, 'storage')">Storage</button>
+                <button class="tab-link" onclick="openTab(event, 'equipment')">Equipment</button>
                 <button class="tab-link" onclick="openTab(event, 'attributes')">Attributes</button>
             </div>
-            <div id="physical" class="tab-content" style="display: block;">
-                <h3>Physical Properties</h3>
-                <div id="physical-properties-content"></div>
+            <div id="composition" class="tab-content" style="display: block;">
+                <h3>Composition & Properties</h3>
+                <div id="composition-content">
+                    <!-- For food items: nutritional info, chemical composition -->
+                    <!-- For equipment: technical specifications -->
+                </div>
             </div>
-            <div id="config" class="tab-content">
-                <h3>Configuration</h3>
-                <div id="config-properties-content"></div>
+            <div id="processing" class="tab-content">
+                <h3>Processing Parameters</h3>
+                <div id="processing-content">
+                    <!-- For food items: processing requirements, temperature ranges -->
+                    <!-- For equipment: operational parameters -->
+                </div>
             </div>
-            <div id="cli" class="tab-content">
-                <h3>Command Line Interface</h3>
-                <textarea id="cli-content" rows="10" style="width: 100%;"></textarea>
+            <div id="storage" class="tab-content">
+                <h3>Storage Requirements</h3>
+                <div id="storage-content">
+                    <!-- For food items: storage conditions, shelf life -->
+                    <!-- For equipment: maintenance info -->
+                </div>
             </div>
-            <div id="attributes" class="tab-content">
-                <h3>Attributes</h3>
-                <div id="attributes-properties-content"></div>
+            <div id="equipment" class="tab-content">
+                <h3>Equipment Requirements</h3>
+                <div id="equipment-content">
+                    <!-- For food items: required equipment -->
+                    <!-- For equipment: safety features -->
+                </div>
             </div>
         </div>
     </div>

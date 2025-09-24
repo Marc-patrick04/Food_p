@@ -1,0 +1,49 @@
+.properties-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.properties-list li {
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.properties-list li:last-child {
+    border-bottom: none;
+}
+
+.properties-list li strong {
+    display: inline-block;
+    min-width: 150px;
+    color: #555;
+}
+
+.properties-list ul {
+    list-style: none;
+    padding-left: 20px;
+    margin: 5px 0;
+}
+
+.modal-tabs {
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 15px;
+}
+
+.tab-link {
+    background: none;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #666;
+}
+
+.tab-link.active {
+    border-bottom: 2px solid #007bff;
+    color: #007bff;
+}
+
+.tab-content {
+    padding: 15px;
+}

@@ -1,3 +1,18 @@
+// Global variables and functions
+window.workspaceItemsState = {};
+window.findToolboxItemData = function(itemName) {
+    for (const category in toolboxData) {
+        for (const subcategory in toolboxData[category]) {
+            const items = toolboxData[category][subcategory];
+            const itemData = items.find(item => item.name === itemName);
+            if (itemData) {
+                return itemData;
+            }
+        }
+    }
+    return null;
+};
+
 document.addEventListener('DOMContentLoaded', () => {
     // --- Timer and Top Bar Logic ---
     const timerElement = document.getElementById('timer');
@@ -127,8 +142,8 @@ document.addEventListener('DOMContentLoaded', () => {
         simulationArea.classList.remove('drag-over');
     });
 
-    let workspaceItemsState = {};
-    let nextItemId = 0;
+    window.workspaceItemsState = window.workspaceItemsState || {};
+    window.nextItemId = window.nextItemId || 0;
 
     simulationArea.addEventListener('drop', (e) => {
         e.preventDefault();
@@ -146,7 +161,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function createWorkspaceItem(name, x, y) {
-        const id = `item-${nextItemId++}`;
+        console.log('Creating workspace item:', name);
+        const id = `item-${window.nextItemId++}`;
         const state = {
             id: id,
             name: name,
@@ -154,6 +170,10 @@ document.addEventListener('DOMContentLoaded', () => {
             unit: 'unit',
             ingredients: []
         };
+        // Store the state in the global workspaceItemsState
+        window.workspaceItemsState[id] = state;
+        console.log('Created state:', state);
+        console.log('Current workspaceItemsState:', window.workspaceItemsState);
         
         const newItem = document.createElement('div');
         newItem.classList.add('workspace-item');
@@ -180,8 +200,20 @@ document.addEventListener('DOMContentLoaded', () => {
         newItem.style.left = `${x - rect.left}px`;
         newItem.style.top = `${y - rect.top}px`;
 
-        workspaceItemsState[state.id] = state;
+        window.workspaceItemsState[state.id] = state;
         simulationArea.appendChild(newItem);
+        
+        // Add direct double-click handler to the new item
+        newItem.addEventListener('dblclick', (e) => {
+            console.log('Double-click on item:', state.id);
+            const itemData = findToolboxItemData(state.name);
+            console.log('Item data:', itemData);
+            if (window.showItemPropertiesModal) {
+                window.showItemPropertiesModal(state.id);
+            } else {
+                console.error('showItemPropertiesModal is not available');
+            }
+        });
     }
 
     function moveWorkspaceItem(id, x, y) {
@@ -211,7 +243,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const itemPropertiesModal = document.getElementById('item-properties-modal');
     const itemPropertiesTitle = document.getElementById('item-properties-title');
     const physicalPropertiesContent = document.getElementById('physical-properties-content');
-    const configPropertiesContent = document.getElementById('config-properties-content');
     const cliContent = document.getElementById('cli-content');
     const attributesPropertiesContent = document.getElementById('attributes-properties-content');
     const propertiesCloseBtn = itemPropertiesModal.querySelector('.close-btn');
@@ -225,25 +256,95 @@ document.addEventListener('DOMContentLoaded', () => {
 
         itemPropertiesTitle.textContent = `${itemData.name} Properties`;
 
-        // Populate Physical Tab
+        // Populate Physical Tab with properties
         let physicalHTML = '<ul>';
-        if (itemData.physical) {
-            for (const key in itemData.physical) {
-                physicalHTML += `<li><strong>${key.charAt(0).toUpperCase() + key.slice(1)}:</strong> ${itemData.physical[key]}</li>`;
+        
+        // Check if it's equipment (has properties field)
+        if (itemData.properties) {
+            // Technical Specifications
+            if (itemData.properties.technical_specs) {
+                physicalHTML += '<li><strong>Technical Specifications:</strong><ul>';
+                for (const [key, value] of Object.entries(itemData.properties.technical_specs)) {
+                    physicalHTML += `<li><strong>${key.charAt(0).toUpperCase() + key.slice(1)}:</strong> ${value}</li>`;
+                }
+                physicalHTML += '</ul></li>';
+            }
+
+            // Operational Parameters
+            if (itemData.properties.operational_parameters) {
+                physicalHTML += '<li><strong>Operational Parameters:</strong><ul>';
+                for (const [key, value] of Object.entries(itemData.properties.operational_parameters)) {
+                    if (Array.isArray(value)) {
+                        physicalHTML += `<li><strong>${key.charAt(0).toUpperCase() + key.slice(1)}:</strong> ${value.join(', ')}</li>`;
+                    } else {
+                        physicalHTML += `<li><strong>${key.charAt(0).toUpperCase() + key.slice(1)}:</strong> ${value}</li>`;
+                    }
+                }
+                physicalHTML += '</ul></li>';
+            }
+
+            // Maintenance Information
+            if (itemData.properties.maintenance_info) {
+                physicalHTML += '<li><strong>Maintenance Information:</strong><ul>';
+                for (const [key, value] of Object.entries(itemData.properties.maintenance_info)) {
+                    physicalHTML += `<li><strong>${key.charAt(0).toUpperCase() + key.slice(1)}:</strong> ${value}</li>`;
+                }
+                physicalHTML += '</ul></li>';
+            }
+
+            // Safety Features
+            if (itemData.properties.safety_features) {
+                physicalHTML += '<li><strong>Safety Features:</strong><ul>';
+                for (const [key, value] of Object.entries(itemData.properties.safety_features)) {
+                    if (Array.isArray(value)) {
+                        physicalHTML += `<li><strong>${key.charAt(0).toUpperCase() + key.slice(1)}:</strong> ${value.join(', ')}</li>`;
+                    } else {
+                        physicalHTML += `<li><strong>${key.charAt(0).toUpperCase() + key.slice(1)}:</strong> ${value}</li>`;
+                    }
+                }
+                physicalHTML += '</ul></li>';
             }
         }
+        // Check for food item properties (components)
+        else if (itemData.components) {
+            // Add basic nutritional info if available
+            if (itemData.components.nutrients) {
+                physicalHTML += '<li><strong>Nutrients:</strong><ul>';
+                for (const [key, value] of Object.entries(itemData.components.nutrients)) {
+                    physicalHTML += `<li><strong>${key.charAt(0).toUpperCase() + key.slice(1)}:</strong> ${value}</li>`;
+                }
+                physicalHTML += '</ul></li>';
+            }
+
+            // Add other components
+            for (const [category, value] of Object.entries(itemData.components)) {
+                if (category !== 'nutrients') {
+                    physicalHTML += `<li><strong>${category.charAt(0).toUpperCase() + category.slice(1)}:</strong>`;
+                    if (typeof value === 'object') {
+                        physicalHTML += '<ul>';
+                        for (const [subKey, subValue] of Object.entries(value)) {
+                            if (Array.isArray(subValue)) {
+                                physicalHTML += `<li><strong>${subKey}:</strong> ${subValue.join(', ')}</li>`;
+                            } else {
+                                physicalHTML += `<li><strong>${subKey}:</strong> ${subValue}</li>`;
+                            }
+                        }
+                        physicalHTML += '</ul>';
+                    } else {
+                        physicalHTML += ` ${value}`;
+                    }
+                    physicalHTML += '</li>';
+                }
+            }
+        }
+        
+        // If no properties found
+        if (physicalHTML === '<ul>') {
+            physicalHTML += '<li>No properties available</li>';
+        }
+        
         physicalHTML += '</ul>';
         physicalPropertiesContent.innerHTML = physicalHTML;
-
-        // Populate Config Tab
-        let configHTML = '<ul>';
-        if (itemData.config) {
-            for (const key in itemData.config) {
-                configHTML += `<li><strong>${key.charAt(0).toUpperCase() + key.slice(1)}:</strong> ${itemData.config[key]}</li>`;
-            }
-        }
-        configHTML += '</ul>';
-        configPropertiesContent.innerHTML = configHTML;
 
         // Populate Attributes Tab
         let attributesHTML = '<ul>';
@@ -278,13 +379,7 @@ document.addEventListener('DOMContentLoaded', () => {
     propertiesCloseBtn.addEventListener('click', closePropertiesModal);
 
     // Add double-click event listener to workspace items
-    simulationArea.addEventListener('dblclick', (e) => {
-        const workspaceItem = e.target.closest('.workspace-item');
-        if (workspaceItem) {
-            const itemId = workspaceItem.getAttribute('data-id');
-            showItemPropertiesModal(itemId);
-        }
-    });
+    // Double-click handling moved to properties.js
 
     function updatePropertiesPanel(itemId) {
         const itemState = workspaceItemsState[itemId];

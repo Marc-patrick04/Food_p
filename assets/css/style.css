@@ -30,3 +30,20 @@
     background-color: #007bff;
     color: white;
 }
+
+#toolbar-icons {
+    display: flex;
+    align-items: center;
+}
+
+#toolbar-icons button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    margin: 0 5px;
+}
+
+#toolbar-icons button img {
+    width: 24px;
+    height: 24px;
+}

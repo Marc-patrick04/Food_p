@@ -4,15 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Food Lab Simulation</title>
-    <link rel="stylesheet" href="assets/css/base.css">
-    <link rel="stylesheet" href="assets/css/toolbox.css">
-    <link rel="stylesheet" href="assets/css/workspace.css">
-    <link rel="stylesheet" href="assets/css/panels.css">
-    <link rel="stylesheet" href="assets/css/modals.css">
-    <link rel="stylesheet" href="assets/css/properties.css">
-    <link rel="stylesheet" href="assets/css/toolbar.css">
-    <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="stylesheet" href="assets/css/in-process.css">
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/dark.css" id="dark-theme-style" disabled>
 </head>
 <body>
     <div id="top-bar">
@@ -28,9 +21,17 @@
     </div>
     <div id="app-container">
         <header>
-            <h1>fffff ffff fffff</h1>
+            <h1>Food Lab</h1>
             <div id="toolbar-icons">
-                <button id="home-btn"><img src="assets/images/home.png" alt="Home"></button>
+                <div class="dropdown">
+                    <button id="home-btn" class="dropdown-btn"><img src="assets/images/home.png" alt="Home"></button>
+                    <div class="dropdown-content">
+                        <a href="#" id="settings-option">Settings</a>
+                        <a href="#" id="preference-option">Preference</a>
+                        <a href="#" id="recent-option">Recent</a>
+                        <a href="#" id="zoom-option">Zoom</a>
+                    </div>
+                </div>
                 <button id="file-btn-icon"><img src="assets/images/file.png" alt="File"></button>
                 <button id="settings-btn"><img src="assets/images/settings.png" alt="Settings"></button>
                 <button id="refresh-btn"><img src="assets/images/refresh.png" alt="Refresh"></button>
@@ -46,7 +47,7 @@
         </header>
         <main>
             <aside id="toolbox">
-                <div id="toolbox-items-container">
+                    <div id="toolbox-items-container">
                     <!-- Items will be populated here -->
                 </div>
                 <div id="toolbox-subcategories-container">
@@ -140,17 +141,17 @@
         </div>
     </div>
     <!-- First load data and utilities -->
-    <script src="assets/js/data.js"></script>
+    <script src="assets/category_js/data.js"></script>
     <!-- Then load feature-specific modules -->
+    <script src="assets/category_js/categories.js"></script>
     <script src="assets/js/modal.js"></script>
     <script src="assets/js/process.js"></script>
     <script src="assets/js/propertyFormatter.js"></script>
     <script src="assets/js/equipmentProperties.js"></script>
     <script src="assets/js/foodProperties.js"></script>
-    <script src="assets/js/properties.js"></script>
     <script src="assets/js/workspace.js"></script>
     <script src="assets/js/toolbar.js"></script>
     <!-- Finally load the main script that ties everything together -->
-    <script src="assets/js/script.js"></script>
+    <script src="assets/category_js/script.js"></script>
 </body>
 </html>

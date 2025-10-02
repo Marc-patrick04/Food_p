@@ -10,12 +10,54 @@ class Toolbar {
         this.autoSaveInterval = 60000; // Auto-save every minute
         this.setupAutoSave();
         this.setupWorkspaceChangeDetection();
+        this.loadStateAfterRefresh();
+        this.loadTheme();
+    }
+
+    loadTheme() {
+        const settings = JSON.parse(localStorage.getItem('workspaceSettings'));
+        if (settings && settings.theme) {
+            this.applyTheme(settings.theme);
+        }
+    }
+
+    applyTheme(theme) {
+        document.getElementById('dark-theme-style').disabled = theme !== 'dark';
+        document.body.classList.toggle('dark-theme', theme === 'dark');
+    }
+
+    loadStateAfterRefresh() {
+        const savedState = sessionStorage.getItem('workspaceRefreshSave');
+        if (savedState) {
+            try {
+                const state = JSON.parse(savedState);
+                this.loadWorkspaceState(state);
+                console.log('Loaded workspace state after refresh.');
+                sessionStorage.removeItem('workspaceRefreshSave'); // Clean up
+            } catch (error) {
+                console.error('Error loading state after refresh:', error);
+            }
+        }
     }
 
     initializeToolbarIcons() {
         // Home button
-        document.getElementById('home-btn').addEventListener('click', () => {
-            this.handleHome();
+        document.getElementById('home-btn').addEventListener('click', (event) => {
+            event.stopPropagation();
+            this.toggleDropdown();
+        });
+
+        // Close dropdown when clicking outside
+        window.addEventListener('click', (event) => {
+            if (!event.target.matches('.dropdown-btn img')) {
+                let dropdowns = document.getElementsByClassName("dropdown-content");
+                for (let i = 0; i < dropdowns.length; i++) {
+                    let openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
         });
 
         // File button
@@ -25,6 +67,12 @@ class Toolbar {
 
         // Settings button
         document.getElementById('settings-btn').addEventListener('click', () => {
+            this.handleSettings();
+        });
+
+        // Settings option in dropdown
+        document.getElementById('settings-option').addEventListener('click', (event) => {
+            event.preventDefault();
             this.handleSettings();
         });
 
@@ -75,6 +123,11 @@ class Toolbar {
         }
     }
 
+    toggleDropdown() {
+        const dropdownContent = document.querySelector(".dropdown-content");
+        dropdownContent.classList.toggle("show");
+    }
+
     handleFile() {
         const fileBtn = document.getElementById('file-btn-icon');
         fileBtn.classList.toggle('active');
@@ -91,6 +144,32 @@ class Toolbar {
             <div class="modal-content">
                 <span class="close-btn">&times;</span>
                 <h2>Settings</h2>
+                <div class="settings-section">
+                    <h3>Theme</h3>
+                    <label>
+                        <select id="theme-select">
+                            <option value="light">Light</option>
+                            <option value="dark">Dark</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="settings-section">
+                    <h3>Notifications</h3>
+                    <label>
+                        <input type="checkbox" id="notifications-enabled">
+                        Enable notifications
+                    </label>
+                </div>
+                <div class="settings-section">
+                    <h3>Language</h3>
+                    <label>
+                        <select id="language-select">
+                            <option value="en">English</option>
+                            <option value="fr">French</option>
+                            <option value="es">Spanish</option>
+                        </select>
+                    </label>
+                </div>
                 <div class="settings-section">
                     <h3>Auto-save</h3>
                     <label>
@@ -134,10 +213,16 @@ class Toolbar {
     }
 
     saveSettings(modal) {
+        const theme = modal.querySelector('#theme-select').value;
+        const notificationsEnabled = modal.querySelector('#notifications-enabled').checked;
+        const language = modal.querySelector('#language-select').value;
         const autosaveEnabled = modal.querySelector('#autosave-enabled').checked;
         const autosaveInterval = parseInt(modal.querySelector('#autosave-interval').value) * 1000;
         const showGrid = modal.querySelector('#show-grid').checked;
         const gridSize = parseInt(modal.querySelector('#grid-size').value);
+
+        // Apply theme
+        this.applyTheme(theme);
 
         // Update autosave settings
         if (autosaveEnabled) {
@@ -161,6 +246,9 @@ class Toolbar {
 
         // Save settings to localStorage
         localStorage.setItem('workspaceSettings', JSON.stringify({
+            theme,
+            notificationsEnabled,
+            language,
             autosaveEnabled,
             autosaveInterval,
             showGrid,
@@ -169,13 +257,11 @@ class Toolbar {
     }
 
     handleRefresh() {
-        if (this.hasUnsavedChanges()) {
-            if (!confirm('You have unsaved changes. Refresh anyway?')) {
-                return;
-            }
+        const state = this.getWorkspaceState();
+        if (Object.keys(state.items).length > 0) {
+            sessionStorage.setItem('workspaceRefreshSave', JSON.stringify(state));
         }
-        this.clearWorkspace();
-        this.loadLastAutoSave(); // Try to load last auto-save if exists
+        location.reload();
     }
 
     handleDelete() {
@@ -375,9 +461,11 @@ class Toolbar {
     }
 
     getWorkspaceState() {
+        const settings = JSON.parse(localStorage.getItem('workspaceSettings')) || {};
         return {
             items: window.workspaceItemsState,
             itemCounts: window.itemCounts,
+            settings: settings,
             timestamp: new Date().toISOString()
         };
     }
@@ -386,6 +474,13 @@ class Toolbar {
         this.clearWorkspace();
         window.workspaceItemsState = state.items;
         window.itemCounts = state.itemCounts;
+
+        // Load and apply settings
+        if (state.settings) {
+            localStorage.setItem('workspaceSettings', JSON.stringify(state.settings));
+            this.applyTheme(state.settings.theme || 'light');
+            // You might want to apply other settings here as well, e.g., grid
+        }
         
         // Recreate items in workspace
         for (const [id, itemState] of Object.entries(state.items)) {

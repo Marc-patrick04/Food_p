@@ -1,0 +1,36 @@
+/* Dark theme styles */
+body.dark-theme {
+    background-color: #333;
+    color: #f4f4f4;
+}
+
+body.dark-theme #app-container {
+    background-color: #444;
+}
+
+body.dark-theme #top-bar {
+    background-color: #222;
+    color: #f4f4f4;
+}
+
+body.dark-theme button {
+    background-color: #555;
+    color: #f4f4f4;
+    border: 1px solid #666;
+}
+
+body.dark-theme button:hover {
+    background-color: #666;
+}
+
+body.dark-theme .modal-content {
+    background-color: #555;
+    color: #f4f4f4;
+}
+
+body.dark-theme input,
+body.dark-theme select {
+    background-color: #666;
+    color: #f4f4f4;
+    border: 1px solid #777;
+}

@@ -26,13 +26,19 @@ function createWorkspaceItem(name, x, y) {
     window.itemCounts[name] = (window.itemCounts[name] || 0) + 1;
     const displayName = `${name}${window.itemCounts[name].toString().padStart(2, '0')}`;
     
+    const simulationArea = document.getElementById('simulation-area');
+    const rect = simulationArea.getBoundingClientRect();
     const state = {
         id: id,
         name: name,
         displayName: displayName,
         quantity: 1,
         unit: 'unit',
-        ingredients: []
+        ingredients: [],
+        position: {
+            x: `${x - rect.left}px`,
+            y: `${y - rect.top}px`
+        }
     };
     
     // Store the state in the global workspaceItemsState
@@ -66,11 +72,9 @@ function createWorkspaceItem(name, x, y) {
     label.textContent = state.displayName;
     newItem.appendChild(label);
     
-    const simulationArea = document.getElementById('simulation-area');
-    const rect = simulationArea.getBoundingClientRect();
     newItem.style.position = 'absolute';
-    newItem.style.left = `${x - rect.left}px`;
-    newItem.style.top = `${y - rect.top}px`;
+    newItem.style.left = state.position.x;
+    newItem.style.top = state.position.y;
 
     window.workspaceItemsState[state.id] = state;
     simulationArea.appendChild(newItem);
@@ -92,8 +96,15 @@ function moveWorkspaceItem(id, x, y) {
     if (item) {
         const simulationArea = document.getElementById('simulation-area');
         const rect = simulationArea.getBoundingClientRect();
-        item.style.left = `${x - rect.left}px`;
-        item.style.top = `${y - rect.top}px`;
+        const newX = `${x - rect.left}px`;
+        const newY = `${y - rect.top}px`;
+        item.style.left = newX;
+        item.style.top = newY;
+
+        // Update the state with the new position
+        if (window.workspaceItemsState[id]) {
+            window.workspaceItemsState[id].position = { x: newX, y: newY };
+        }
     }
 }
 

@@ -1,0 +1,15 @@
+/* Import all CSS files */
+@import 'base.css';
+@import 'toolbox.css';
+@import 'workspace.css';
+@import 'panels.css';
+@import 'modals.css';
+@import 'properties.css';
+@import 'toolbar.css';
+@import 'style.css';
+@import 'in-process.css';
+@import 'equipment.css';
+@import 'mixing.css';
+@import 'dark.css';
+
+/* Add any global styles here */
